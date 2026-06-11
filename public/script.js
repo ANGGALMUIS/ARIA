@@ -435,7 +435,28 @@ const historyClear = document.getElementById("history-clear");
 // ===============================
 // OPENAI API KEY
 // ===============================
-window.OPENAI_API_KEY = "";
+async function tanyaAI(pesan) {
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        pesan,
+      }),
+    });
+
+    const data = await response.json();
+
+    return data.jawaban;
+  } catch (err) {
+    console.error(err);
+    return "Koneksi bermasalah.";
+  }
+}
 
 // ===============================
 // HISTORY STATE

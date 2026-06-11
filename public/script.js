@@ -433,32 +433,6 @@ const historyBadge = document.getElementById("history-badge");
 const historyClear = document.getElementById("history-clear");
 
 // ===============================
-// OPENAI API KEY
-// ===============================
-async function tanyaAI(pesan) {
-  try {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
-        pesan,
-      }),
-    });
-
-    const data = await response.json();
-
-    return data.jawaban;
-  } catch (err) {
-    console.error(err);
-    return "Koneksi bermasalah.";
-  }
-}
-
-// ===============================
 // HISTORY STATE
 // ===============================
 let historyOpen = false;
@@ -553,53 +527,25 @@ function autoFadeChat() {
 // OPENAI CHAT
 // ===============================
 async function tanyaAI(pesan) {
-  if (!window.OPENAI_API_KEY || window.OPENAI_API_KEY.trim() === "") {
-    return "Masukkan API Key OpenAI.";
-  }
-
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("/api/chat", {
       method: "POST",
-
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${window.OPENAI_API_KEY}`,
       },
-
       body: JSON.stringify({
-        model: "gpt-4o-mini",
-
-        messages: [
-          {
-            role: "system",
-            content:
-              "Nama kamu Aria, asisten virtual hologram AI yang natural, santai, ramah, dan futuristik.",
-          },
-          {
-            role: "user",
-            content: pesan,
-          },
-        ],
-
-        temperature: 0.8,
-        max_tokens: 120,
+        pesan,
       }),
     });
 
-    if (!response.ok) {
-      console.log(await response.text());
-      return "API Error.";
-    }
-
     const data = await response.json();
 
-    return data.choices[0].message.content;
+    return data.jawaban;
   } catch (err) {
     console.error(err);
     return "Koneksi bermasalah.";
   }
 }
-
 // ===============================
 // TEXT TO SPEECH
 // ===============================
